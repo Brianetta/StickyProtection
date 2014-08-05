@@ -7,7 +7,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.material.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -121,11 +121,90 @@ public class StickyProtection extends JavaPlugin implements Listener {
         return false;
     }
 
-    private boolean accessDenied(Block block, Player player) {
-        if (database.getProtection(block).isProtected()) {
-            return database.accessDenied(player, block);
+    boolean checkProtection(Block block) {
+        // Check whether this block is protected by StickyLocks
+        if (accessDenied(block)) {
+            return true;
+        }
+        // Check whether this block is supporting a block above it which is protected by StickyLocks
+        Block relativeBlock = block.getRelative(BlockFace.UP);
+        switch (relativeBlock.getType()) {
+            case IRON_DOOR:
+            case WOODEN_DOOR:
+            case REDSTONE_COMPARATOR_ON:
+            case REDSTONE_COMPARATOR_OFF:
+            case DIODE_BLOCK_ON:
+            case DIODE_BLOCK_OFF:
+            case SIGN_POST:
+            case DRAGON_EGG:
+            case ANVIL:
+            case GOLD_PLATE:
+            case IRON_PLATE:
+            case STONE_PLATE:
+            case WOOD_PLATE:
+            case GRAVEL:
+            case SAND:
+            case REDSTONE_WIRE:
+                if(accessDenied(relativeBlock)) {
+                    return true;
+                }
+                break;
+            case TORCH:
+            case REDSTONE_TORCH_ON:
+            case REDSTONE_TORCH_OFF:
+            case WOOD_BUTTON:
+            case STONE_BUTTON:
+            case LEVER:
+                if (((SimpleAttachableMaterialData) relativeBlock.getState().getData()).getAttachedFace().equals(BlockFace.DOWN) & accessDenied(relativeBlock)) {
+                    return true;
+                }
+        }
+        // This is interesting... an anonymous set to iterate, so I don't have to write code four times.
+        for (BlockFace lateralFace : new HashSet<BlockFace>(){{
+            add(BlockFace.EAST);
+            add(BlockFace.NORTH);
+            add(BlockFace.WEST);
+            add(BlockFace.SOUTH);
+        }}) {
+            // Things which hang off the side of a block
+            relativeBlock = block.getRelative(lateralFace);
+            getLogger().info(lateralFace.name());
+            switch (relativeBlock.getType()) {
+                case TRAP_DOOR:
+                    // Future: case IRON_TRAPDOOR:
+                case WALL_SIGN:
+                case TORCH:
+                case REDSTONE_TORCH_ON:
+                case REDSTONE_TORCH_OFF:
+                case WOOD_BUTTON:
+                case STONE_BUTTON:
+                case LEVER:
+                case LADDER:
+                case TRIPWIRE_HOOK:
+                    if (((SimpleAttachableMaterialData) relativeBlock.getState().getData()).getAttachedFace().equals(lateralFace.getOppositeFace()) & accessDenied(relativeBlock)) {
+                        return true;
+                    }
+            }
+            // Things which hang from under a block
+            relativeBlock = block.getRelative(BlockFace.DOWN);
+            switch (relativeBlock.getType()) {
+                case WOOD_BUTTON:
+                case STONE_BUTTON:
+                case LEVER:
+                    if (((SimpleAttachableMaterialData) relativeBlock.getState().getData()).getAttachedFace().equals(BlockFace.UP) & accessDenied(relativeBlock)) {
+                        return true;
+                    }
+            }
         }
         return false;
+    }
+
+    private boolean accessDenied(Block block, Player player) {
+        return database.getProtection(block).isProtected() && database.accessDenied(player, block);
+    }
+
+    private boolean accessDenied(Block block) {
+        return database.getProtection(block).isProtected();
     }
 
     @EventHandler
@@ -138,6 +217,38 @@ public class StickyProtection extends JavaPlugin implements Listener {
                 event.setCancelled(true);
                 stickyLocks.sendMessage(event.getPlayer(),"This block is protected from destruction",false);
             }
+        }
+    }
+
+    @EventHandler
+    public void onBlockPistonExtend(BlockPistonExtendEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+        for (Block block : event.getBlocks()) {
+            if (checkProtection(event.getBlock())) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBlockPistonRetract(BlockPistonRetractEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+        if (checkProtection(event.getBlock())) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onBlockBurn(BlockBurnEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+        if (checkProtection(event.getBlock())) {
+            event.setCancelled(true);
         }
     }
 }
