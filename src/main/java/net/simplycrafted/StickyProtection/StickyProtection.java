@@ -234,7 +234,7 @@ public class StickyProtection extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onBlockPistonRetract(BlockPistonRetractEvent event) {
-        if (event.isCancelled()) {
+        if (event.isCancelled() | !event.isSticky()) {
             return;
         }
         if (checkProtection(event.getBlock())) {
