@@ -2,6 +2,7 @@ package net.simplycrafted.StickyProtection;
 
 import net.simplycrafted.StickyLocks.Database;
 import net.simplycrafted.StickyLocks.StickyLocks;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -90,7 +91,6 @@ public class StickyProtection extends JavaPlugin implements Listener {
         }}) {
             // Things which hang off the side of a block
             relativeBlock = block.getRelative(lateralFace);
-            getLogger().info(lateralFace.name());
             switch (relativeBlock.getType()) {
                 case TRAP_DOOR:
                 // Future: case IRON_TRAPDOOR:
@@ -168,7 +168,6 @@ public class StickyProtection extends JavaPlugin implements Listener {
         }}) {
             // Things which hang off the side of a block
             relativeBlock = block.getRelative(lateralFace);
-            getLogger().info(lateralFace.name());
             switch (relativeBlock.getType()) {
                 case TRAP_DOOR:
                     // Future: case IRON_TRAPDOOR:
@@ -226,7 +225,7 @@ public class StickyProtection extends JavaPlugin implements Listener {
             return;
         }
         for (Block block : event.getBlocks()) {
-            if (checkProtection(event.getBlock())) {
+            if (checkProtection(block)) {
                 event.setCancelled(true);
             }
         }
