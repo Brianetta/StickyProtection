@@ -237,7 +237,8 @@ public class StickyProtection extends JavaPlugin implements Listener {
         if (event.isCancelled() | !event.isSticky()) {
             return;
         }
-        if (checkProtection(event.getBlock())) {
+        // Check the block beyond the piston extension, which is two blocks away
+        if (checkProtection(event.getBlock().getRelative(event.getDirection()).getRelative(event.getDirection()))) {
             event.setCancelled(true);
         }
     }
