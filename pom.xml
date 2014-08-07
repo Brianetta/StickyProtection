@@ -6,7 +6,7 @@
 
     <groupId>StickyProtection</groupId>
     <artifactId>StickyProtection</artifactId>
-    <version>0.4</version>
+    <version>0.4.1</version>
     <repositories>
         <repository>
             <id>bukkit-repo</id>
