@@ -78,8 +78,12 @@ public class StickyProtection extends JavaPlugin implements Listener {
             case WOOD_BUTTON:
             case STONE_BUTTON:
             case LEVER:
-                if (((SimpleAttachableMaterialData) relativeBlock.getState().getData()).getAttachedFace().equals(BlockFace.DOWN) & accessDenied(relativeBlock, player)) {
-                    return true;
+                try {
+                    if (((SimpleAttachableMaterialData) relativeBlock.getState().getData()).getAttachedFace().equals(BlockFace.DOWN) & accessDenied(relativeBlock, player)) {
+                        return true;
+                    }
+                } catch (ClassCastException e) {
+                    getLogger().info("ClassCastException (safe to ignore)");
                 }
         }
         // This is interesting... an anonymous set to iterate, so I don't have to write code four times.
@@ -103,8 +107,12 @@ public class StickyProtection extends JavaPlugin implements Listener {
                 case LEVER:
                 case LADDER:
                 case TRIPWIRE_HOOK:
-                    if (((SimpleAttachableMaterialData) relativeBlock.getState().getData()).getAttachedFace().equals(lateralFace.getOppositeFace()) & accessDenied(relativeBlock, player)) {
-                        return true;
+                    try {
+                        if (((SimpleAttachableMaterialData) relativeBlock.getState().getData()).getAttachedFace().equals(lateralFace.getOppositeFace()) & accessDenied(relativeBlock, player)) {
+                            return true;
+                        }
+                    } catch (ClassCastException e) {
+                        getLogger().info("ClassCastException (safe to ignore)");
                     }
             }
             // Things which hang from under a block
@@ -113,8 +121,12 @@ public class StickyProtection extends JavaPlugin implements Listener {
                 case WOOD_BUTTON:
                 case STONE_BUTTON:
                 case LEVER:
-                    if (((SimpleAttachableMaterialData) relativeBlock.getState().getData()).getAttachedFace().equals(BlockFace.UP) & accessDenied(relativeBlock, player)) {
-                        return true;
+                    try {
+                        if (((SimpleAttachableMaterialData) relativeBlock.getState().getData()).getAttachedFace().equals(BlockFace.UP) & accessDenied(relativeBlock, player)) {
+                            return true;
+                        }
+                    } catch (ClassCastException e) {
+                        getLogger().info("ClassCastException (safe to ignore)");
                     }
             }
         }
@@ -155,8 +167,12 @@ public class StickyProtection extends JavaPlugin implements Listener {
             case WOOD_BUTTON:
             case STONE_BUTTON:
             case LEVER:
-                if (((SimpleAttachableMaterialData) relativeBlock.getState().getData()).getAttachedFace().equals(BlockFace.DOWN) & accessDenied(relativeBlock)) {
-                    return true;
+                try {
+                    if (((SimpleAttachableMaterialData) relativeBlock.getState().getData()).getAttachedFace().equals(BlockFace.DOWN) & accessDenied(relativeBlock)) {
+                        return true;
+                    }
+                } catch (ClassCastException e) {
+                    getLogger().info("ClassCastException (safe to ignore)");
                 }
         }
         // This is interesting... an anonymous set to iterate, so I don't have to write code four times.
@@ -180,8 +196,12 @@ public class StickyProtection extends JavaPlugin implements Listener {
                 case LEVER:
                 case LADDER:
                 case TRIPWIRE_HOOK:
-                    if (((SimpleAttachableMaterialData) relativeBlock.getState().getData()).getAttachedFace().equals(lateralFace.getOppositeFace()) & accessDenied(relativeBlock)) {
-                        return true;
+                    try {
+                        if (((SimpleAttachableMaterialData) relativeBlock.getState().getData()).getAttachedFace().equals(lateralFace.getOppositeFace()) & accessDenied(relativeBlock)) {
+                            return true;
+                        }
+                    } catch (ClassCastException e) {
+                        getLogger().info("ClassCastException (safe to ignore)");
                     }
             }
             // Things which hang from under a block
@@ -190,8 +210,12 @@ public class StickyProtection extends JavaPlugin implements Listener {
                 case WOOD_BUTTON:
                 case STONE_BUTTON:
                 case LEVER:
-                    if (((SimpleAttachableMaterialData) relativeBlock.getState().getData()).getAttachedFace().equals(BlockFace.UP) & accessDenied(relativeBlock)) {
-                        return true;
+                    try {
+                        if (((SimpleAttachableMaterialData) relativeBlock.getState().getData()).getAttachedFace().equals(BlockFace.UP) & accessDenied(relativeBlock)) {
+                            return true;
+                        }
+                    } catch (ClassCastException e) {
+                        getLogger().info("ClassCastException (safe to ignore)");
                     }
             }
         }
