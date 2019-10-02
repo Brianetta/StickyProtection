@@ -2,6 +2,7 @@ name: StickyProtection
 main: net.simplycrafted.StickyProtection.StickyProtection
 author: Brianetta
 website: https://github.com/Brianetta/StickyProtection
-version: 0.8
+version: ${project.version}
+api-version: 1.13
 depend:
     - StickyLocks
