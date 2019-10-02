@@ -2,14 +2,16 @@ package net.simplycrafted.StickyProtection;
 
 import net.simplycrafted.StickyLocks.Database;
 import net.simplycrafted.StickyLocks.StickyLocks;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.*;
-import org.bukkit.material.*;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.material.SimpleAttachableMaterialData;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
@@ -53,29 +55,44 @@ public class StickyProtection extends JavaPlugin implements Listener {
         Block relativeBlock = block.getRelative(BlockFace.UP);
         switch (relativeBlock.getType()) {
             case IRON_DOOR:
-            case WOODEN_DOOR:
-            case REDSTONE_COMPARATOR_ON:
-            case REDSTONE_COMPARATOR_OFF:
-            case DIODE_BLOCK_ON:
-            case DIODE_BLOCK_OFF:
-            case SIGN_POST:
+            case ACACIA_DOOR:
+            case BIRCH_DOOR:
+            case DARK_OAK_DOOR:
+            case JUNGLE_DOOR:
+            case OAK_DOOR:
+            case SPRUCE_DOOR:
+            case COMPARATOR:
+            case REPEATER:
+            case SIGN:
             case DRAGON_EGG:
             case ANVIL:
-            case GOLD_PLATE:
-            case IRON_PLATE:
-            case STONE_PLATE:
-            case WOOD_PLATE:
+            case CHIPPED_ANVIL:
+            case DAMAGED_ANVIL:
+            case ACACIA_PRESSURE_PLATE:
+            case BIRCH_PRESSURE_PLATE:
+            case DARK_OAK_PRESSURE_PLATE:
+            case HEAVY_WEIGHTED_PRESSURE_PLATE:
+            case JUNGLE_PRESSURE_PLATE:
+            case LIGHT_WEIGHTED_PRESSURE_PLATE:
+            case OAK_PRESSURE_PLATE:
+            case SPRUCE_PRESSURE_PLATE:
+            case STONE_PRESSURE_PLATE:
             case GRAVEL:
             case SAND:
             case REDSTONE_WIRE:
+            case BREWING_STAND:
                 if(accessDenied(relativeBlock, player)) {
                     return true;
                 }
                 break;
             case TORCH:
-            case REDSTONE_TORCH_ON:
-            case REDSTONE_TORCH_OFF:
-            case WOOD_BUTTON:
+            case REDSTONE_TORCH:
+            case ACACIA_BUTTON:
+            case BIRCH_BUTTON:
+            case DARK_OAK_BUTTON:
+            case JUNGLE_BUTTON:
+            case OAK_BUTTON:
+            case SPRUCE_BUTTON:
             case STONE_BUTTON:
             case LEVER:
                 try {
@@ -96,13 +113,15 @@ public class StickyProtection extends JavaPlugin implements Listener {
             // Things which hang off the side of a block
             relativeBlock = block.getRelative(lateralFace);
             switch (relativeBlock.getType()) {
-                case TRAP_DOOR:
-                // Future: case IRON_TRAPDOOR:
                 case WALL_SIGN:
                 case TORCH:
-                case REDSTONE_TORCH_ON:
-                case REDSTONE_TORCH_OFF:
-                case WOOD_BUTTON:
+                case REDSTONE_TORCH:
+                case ACACIA_BUTTON:
+                case BIRCH_BUTTON:
+                case DARK_OAK_BUTTON:
+                case JUNGLE_BUTTON:
+                case OAK_BUTTON:
+                case SPRUCE_BUTTON:
                 case STONE_BUTTON:
                 case LEVER:
                 case LADDER:
@@ -118,7 +137,12 @@ public class StickyProtection extends JavaPlugin implements Listener {
             // Things which hang from under a block
             relativeBlock = block.getRelative(BlockFace.DOWN);
             switch (relativeBlock.getType()) {
-                case WOOD_BUTTON:
+                case ACACIA_BUTTON:
+                case BIRCH_BUTTON:
+                case DARK_OAK_BUTTON:
+                case JUNGLE_BUTTON:
+                case OAK_BUTTON:
+                case SPRUCE_BUTTON:
                 case STONE_BUTTON:
                 case LEVER:
                     try {
@@ -142,18 +166,26 @@ public class StickyProtection extends JavaPlugin implements Listener {
         Block relativeBlock = block.getRelative(BlockFace.UP);
         switch (relativeBlock.getType()) {
             case IRON_DOOR:
-            case WOODEN_DOOR:
-            case REDSTONE_COMPARATOR_ON:
-            case REDSTONE_COMPARATOR_OFF:
-            case DIODE_BLOCK_ON:
-            case DIODE_BLOCK_OFF:
-            case SIGN_POST:
+            case ACACIA_DOOR:
+            case BIRCH_DOOR:
+            case DARK_OAK_DOOR:
+            case JUNGLE_DOOR:
+            case OAK_DOOR:
+            case SPRUCE_DOOR:
+            case COMPARATOR:
+            case REPEATER:
+            case SIGN:
             case DRAGON_EGG:
             case ANVIL:
-            case GOLD_PLATE:
-            case IRON_PLATE:
-            case STONE_PLATE:
-            case WOOD_PLATE:
+            case ACACIA_PRESSURE_PLATE:
+            case BIRCH_PRESSURE_PLATE:
+            case DARK_OAK_PRESSURE_PLATE:
+            case HEAVY_WEIGHTED_PRESSURE_PLATE:
+            case JUNGLE_PRESSURE_PLATE:
+            case LIGHT_WEIGHTED_PRESSURE_PLATE:
+            case OAK_PRESSURE_PLATE:
+            case SPRUCE_PRESSURE_PLATE:
+            case STONE_PRESSURE_PLATE:
             case GRAVEL:
             case SAND:
             case REDSTONE_WIRE:
@@ -162,9 +194,13 @@ public class StickyProtection extends JavaPlugin implements Listener {
                 }
                 break;
             case TORCH:
-            case REDSTONE_TORCH_ON:
-            case REDSTONE_TORCH_OFF:
-            case WOOD_BUTTON:
+            case REDSTONE_TORCH:
+            case ACACIA_BUTTON:
+            case BIRCH_BUTTON:
+            case DARK_OAK_BUTTON:
+            case JUNGLE_BUTTON:
+            case OAK_BUTTON:
+            case SPRUCE_BUTTON:
             case STONE_BUTTON:
             case LEVER:
                 try {
@@ -185,13 +221,15 @@ public class StickyProtection extends JavaPlugin implements Listener {
             // Things which hang off the side of a block
             relativeBlock = block.getRelative(lateralFace);
             switch (relativeBlock.getType()) {
-                case TRAP_DOOR:
-                    // Future: case IRON_TRAPDOOR:
                 case WALL_SIGN:
                 case TORCH:
-                case REDSTONE_TORCH_ON:
-                case REDSTONE_TORCH_OFF:
-                case WOOD_BUTTON:
+                case REDSTONE_TORCH:
+                case ACACIA_BUTTON:
+                case BIRCH_BUTTON:
+                case DARK_OAK_BUTTON:
+                case JUNGLE_BUTTON:
+                case OAK_BUTTON:
+                case SPRUCE_BUTTON:
                 case STONE_BUTTON:
                 case LEVER:
                 case LADDER:
@@ -207,7 +245,12 @@ public class StickyProtection extends JavaPlugin implements Listener {
             // Things which hang from under a block
             relativeBlock = block.getRelative(BlockFace.DOWN);
             switch (relativeBlock.getType()) {
-                case WOOD_BUTTON:
+                case ACACIA_BUTTON:
+                case BIRCH_BUTTON:
+                case DARK_OAK_BUTTON:
+                case JUNGLE_BUTTON:
+                case OAK_BUTTON:
+                case SPRUCE_BUTTON:
                 case STONE_BUTTON:
                 case LEVER:
                     try {
